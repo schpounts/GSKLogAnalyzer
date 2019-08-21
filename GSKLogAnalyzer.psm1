@@ -96,6 +96,7 @@ You can combine the interval and the port numbers
                 $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $Interval
             }
             #change to test git
+            #this is another changer
 
     
             if ($GskFirewallLog.count -gt 0)
