@@ -100,7 +100,7 @@ You can combine the interval and the port numbers
     
             if ($GskFirewallLog.count -gt 0)
             {
-                Group-GSKFirewallLog -FirewallLog $GskFirewallLog | Select-Object 'Generate Time', 'Source address', 'Destination address', 'Application', 'Destination Port', 'IP Protocol', 'minPort', 'maxPort'
+                Group-GSKFirewallLog -FirewallLog $GskFirewallLog | Select-Object 'Source address', 'Destination address', 'Application', 'Destination Port', 'IP Protocol', 'minPort', 'maxPort'
             }
             else
             {
