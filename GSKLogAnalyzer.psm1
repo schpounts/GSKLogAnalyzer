@@ -95,10 +95,7 @@ You can combine the interval and the port numbers
                 Write-Verbose "analyzing log with a time interval"
                 $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $Interval
             }
-            #change to test git
-            #this is another changer
-            #will the dev branch be created on github? 
-            #changed again
+            
 
     
             if ($GskFirewallLog.count -gt 0)
