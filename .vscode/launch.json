@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "PowerShell Launch ",
+            "name": "PowerShell Launch function with args",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${workspaceFolder}/GSKLogAnalyzer.psm1",
+            "script": "${workspaceFolder}/GSKLogAnalyzer.psm1/Select-GSKFirewallLog",
             "args": [
                 "-LogPath 'C:\\Users\\schpo\\Downloads\\WAV Logs with source as 172.26.38.x - 2nd Aug.csv' "
             ],
