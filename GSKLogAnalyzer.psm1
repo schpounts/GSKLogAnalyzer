@@ -57,7 +57,9 @@ You can combine the interval and the port numbers
         [datetime]
         $DateTime,
         [int[]]
-        $DestinationPort  
+        $DestinationPort,
+        [switch]
+        $RemoveInfraPort  
     )
     dynamicparam
     {
@@ -77,23 +79,35 @@ You can combine the interval and the port numbers
     }
     process
     {
+        if ($RemoveInfraPort)
+        {
+            $RemoveInfraPort = $true
+        }
+        else 
+        {
+            $RemoveInfraPort = $false
+        }
+
         try
         {
             $GskFirewallLog = Import-GSKFirewallLog -Path $LogPath -ErrorAction Stop
+
+
+
             if ($PSBoundParameters.ContainsKey('DestinationPort') -and $PSBoundParameters.ContainsKey('DateTime') )
             {
                 Write-Verbose "analyzing log with Destination port(s), and a time interval"
-                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -DateTime $DateTime -Interval $Interval
+                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -DateTime $DateTime -Interval $Interval -RemoveInfraPort:$RemoveInfraPort
             }
             elseif ($PSBoundParameters.ContainsKey('DestinationPort'))
             {
                 Write-Verbose "analyzing log with Destination port(s)"
-                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort
+                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -RemoveInfraPort:$RemoveInfraPort
             }
             elseif ($PSBoundParameters.ContainsKey('DateTime'))
             {
                 Write-Verbose "analyzing log with a time interval"
-                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $Interval
+                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $Interval -DestinationPort:$RemoveInfraPort
             }
             
 
@@ -186,11 +200,38 @@ function remove-GSKUnewantedFirewallLog
         [int]
         $Interval,
         [int[]]
-        $DestinationPort        
+        $DestinationPort,
+        [switch]
+        $RemoveInfraPort        
     )
-    $OutArray = @()
+    
+    $infraPort = 53, 67, 68, 80, 88, 123, 389, 443, 8014
+    
+    if ($RemoveInfraPort)
+    {
+        $OutArray = @()
+        foreach ($log in $FirewallLog)
+        {
+            $match = $false
+            foreach ($port in $infraPort)
+            {
+                if ($port.tostring() -eq $FirewallLog.'Destination Port')
+                {
+                    $match = $true
+                    break
+                }
+            }
+
+            if (!$match)
+            {
+                $OutArray += $log
+            }
+        }
+        $FirewallLog = $OutArray
+    }
     if ($PSBoundParameters.ContainsKey('DestinationPort'))
     {
+        $OutArray = @()
         foreach ($port in $DestinationPort)
         {
             foreach ($log in $FirewallLog)
