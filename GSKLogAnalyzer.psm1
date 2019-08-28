@@ -62,7 +62,7 @@ You can combine the interval and the port numbers
         $DateTime,
         [int[]]
         $DestinationPort  
-    )
+    )#end param
     dynamicparam
     {
         if ($PSBoundParameters.ContainsKey('DateTime'))
@@ -78,7 +78,7 @@ You can combine the interval and the port numbers
             $paramDictionary.Add('interval', $intervalParam)
             return $paramDictionary
         }
-    }
+    }#end dynamic param
 
     #test git in VSCode
     process
@@ -93,7 +93,7 @@ You can combine the interval and the port numbers
             }
             elseif ($PSBoundParameters.ContainsKey('DestinationPort'))
             {
-                Write-Verbose "analyzing log with Destination port(s)"
+                Write-Verbose "analyzing log with Destination port(s)"  
                 $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort
             }
             elseif ($PSBoundParameters.ContainsKey('DateTime'))
