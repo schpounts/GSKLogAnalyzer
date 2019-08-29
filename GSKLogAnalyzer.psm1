@@ -212,7 +212,7 @@ function remove-GSKUnwantedFirewallLog
     if ($RemoveInfraPort)
     {
         Write-Verbose "Removing infra Port"
-        $infraPort = 53, 67, 68, 80, 88, 123, 389, 443, 8014
+        $infraPort = 53, 67, 68, 80, 88, 123, 137, 389, 443, 8014
         $OutArray = @()
 
         foreach ($log in $FirewallLog)
