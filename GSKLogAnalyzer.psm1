@@ -97,7 +97,7 @@ You can combine the interval and the port numbers
             if ($PSBoundParameters.ContainsKey('DestinationPort') -and $PSBoundParameters.ContainsKey('DateTime') )
             {
                 Write-Verbose "analyzing log with Destination port(s), and a time interval"
-                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -DateTime $DateTime -Interval $Interval -RemoveInfraPort:$RemoveInfraPort
+                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -DateTime $DateTime -Interval $interval -RemoveInfraPort:$RemoveInfraPort
             }
             elseif ($PSBoundParameters.ContainsKey('DestinationPort'))
             {
@@ -107,7 +107,7 @@ You can combine the interval and the port numbers
             elseif ($PSBoundParameters.ContainsKey('DateTime'))
             {
                 Write-Verbose "analyzing log with a time interval"
-                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $Interval -RemoveInfraPort:$RemoveInfraPort
+                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $interval -RemoveInfraPort:$RemoveInfraPort
             }
             else
             {
