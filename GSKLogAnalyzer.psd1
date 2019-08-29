@@ -12,7 +12,7 @@
     RootModule        = '.\GSKLogAnalyzer.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.2.0'
+    ModuleVersion     = '1.0.2.2'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -24,7 +24,7 @@
     Author            = 'Thomas Alsteens'
 
     # Company or vendor of this module
-    CompanyName       = 'GSK Vaccines'
+    CompanyName       = 'Business & ICT Consulting'
 
     # Copyright statement for this module
     Copyright         = '(c) Thomas Alsteens. All rights reserved.'
