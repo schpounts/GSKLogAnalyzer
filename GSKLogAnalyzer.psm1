@@ -118,7 +118,7 @@ You can combine the interval and the port numbers
     
             if ($GskFirewallLog.count -gt 0)
             {
-                Group-GSKFirewallLog -FirewallLog $GskFirewallLog | Select-Object 'Generate Time', 'Source address', 'Destination address', 'Application', 'Destination Port', 'IP Protocol', 'minPort', 'maxPort'
+                Group-GSKFirewallLog -FirewallLog $GskFirewallLog | Select-Object 'Source address', 'Destination address', 'Application', 'Destination Port', 'IP Protocol', 'minPort', 'maxPort', 'Range'
             }
             else
             {
@@ -301,6 +301,7 @@ This will take the all file and group every ports from anytime
         
         $log | Add-Member -Type NoteProperty -Name "minPort" -Value $log."Source Port"
         $log | Add-Member -Type NoteProperty -Name "maxPort" -Value $log."Source Port"
+        $log | Add-Member -Type NoteProperty -Name "Range" -Value 0
 
         $match = $false
         if ($OutArray.Count -ne 0)
@@ -338,6 +339,11 @@ This will take the all file and group every ports from anytime
             $OutArray += $log
         }
     }#end foreachLog$
+
+    foreach ($log in $OutArray)
+    {
+        $log.'Range' = $log.'minPort' + ' - ' + $log.'maxPort'
+    }
     Write-Verbose "The grouping has been done"
     $outArray
 }#endFunction
