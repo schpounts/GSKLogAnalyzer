@@ -40,7 +40,7 @@
             "name": "PowerShell Interactive Session",
             "type": "PowerShell",
             "request": "launch",
-            "cwd": ""
+            "cwd": "C:\\Users\\schpo\\OneDrive\\PowerShell\\Modules\\GSKLogAnalyzer"
         },
         {
             "name": "PowerShell Attach Interactive Session Runspace",

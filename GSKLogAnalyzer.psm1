@@ -97,19 +97,23 @@ You can combine the interval and the port numbers
             if ($PSBoundParameters.ContainsKey('DestinationPort') -and $PSBoundParameters.ContainsKey('DateTime') )
             {
                 Write-Verbose "analyzing log with Destination port(s), and a time interval"
-                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -DateTime $DateTime -Interval $Interval -RemoveInfraPort:$RemoveInfraPort
+                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -DateTime $DateTime -Interval $Interval -RemoveInfraPort:$RemoveInfraPort
             }
             elseif ($PSBoundParameters.ContainsKey('DestinationPort'))
             {
                 Write-Verbose "analyzing log with Destination port(s)"
-                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -RemoveInfraPort:$RemoveInfraPort
+                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -DestinationPort $DestinationPort -RemoveInfraPort:$RemoveInfraPort
             }
             elseif ($PSBoundParameters.ContainsKey('DateTime'))
             {
                 Write-Verbose "analyzing log with a time interval"
-                $GskFirewallLog = remove-GSKUnewantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $Interval -DestinationPort:$RemoveInfraPort
+                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -DateTime $DateTime -Interval $Interval -DestinationPort:$RemoveInfraPort
             }
-            
+            else
+            {
+                Write-Verbose "analyzing all log"
+                $GskFirewallLog = remove-GSKUnwantedFirewallLog -FirewallLog $GskFirewallLog -RemoveInfraPort:$RemoveInfraPort
+            }
 
     
             if ($GskFirewallLog.count -gt 0)
@@ -187,7 +191,7 @@ This is the Path to the CSV file
 }
 
 
-function remove-GSKUnewantedFirewallLog
+function remove-GSKUnwantedFirewallLog
 {
     [CmdletBinding()]
     param (
@@ -204,18 +208,19 @@ function remove-GSKUnewantedFirewallLog
         [switch]
         $RemoveInfraPort        
     )
-    
-    $infraPort = 53, 67, 68, 80, 88, 123, 389, 443, 8014
-    
+
     if ($RemoveInfraPort)
     {
+        Write-Verbose "Removing infra Port"
+        $infraPort = 53, 67, 68, 80, 88, 123, 389, 443, 8014
         $OutArray = @()
+
         foreach ($log in $FirewallLog)
         {
             $match = $false
             foreach ($port in $infraPort)
             {
-                if ($port.tostring() -eq $FirewallLog.'Destination Port')
+                if ($port -eq $log.'Destination Port')
                 {
                     $match = $true
                     break
@@ -229,8 +234,10 @@ function remove-GSKUnewantedFirewallLog
         }
         $FirewallLog = $OutArray
     }
+
     if ($PSBoundParameters.ContainsKey('DestinationPort'))
     {
+        Write-Verbose "selecting requested ports from the log"
         $OutArray = @()
         foreach ($port in $DestinationPort)
         {
@@ -247,7 +254,8 @@ function remove-GSKUnewantedFirewallLog
 
     
     if ($PSBoundParameters.ContainsKey('DateTime'))
-    {        
+    {
+        Write-Verbose "selecting requested timespan from the log"        
         $OutArray = @()
         $min = (get-date $DateTime).ToShortTimeString()
         $ts = New-TimeSpan -Minutes $Interval
