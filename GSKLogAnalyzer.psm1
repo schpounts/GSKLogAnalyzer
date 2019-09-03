@@ -214,9 +214,12 @@ function remove-GSKUnwantedFirewallLog
         Write-Verbose "Removing infra Port"
         $infraPort = 53, 67, 68, 80, 88, 123, 135, 137, 138, 139, 389, 443, 445, 2967, 8014
         $OutArray = @()
+        $logAnalyzed = 0
 
         foreach ($log in $FirewallLog)
         {
+            Write-Progress -Activity "Removing infra Port" -Status "progress : " -PercentComplete ($logAnalyzed / $FirewallLog.Count * 100)
+            $logAnalyzed += 1
             $match = $false
             foreach ($port in $infraPort)
             {
@@ -296,9 +299,12 @@ This will take the all file and group every ports from anytime
     )
     Write-Verbose -Message "Group-GSKFirewallLog has started"
     $OutArray = @()
+    $logGrouped
+    $totalLog = $FirewallLog.Count
     Foreach ($log in $FirewallLog)
     {
-        
+        Write-Progress -Activity "grouping logs" -Status "Progress:" -PercentComplete ($logGrouped / $totalLog * 100)
+        $logGrouped += 1
         $log | Add-Member -Type NoteProperty -Name "minPort" -Value $log."Source Port"
         $log | Add-Member -Type NoteProperty -Name "maxPort" -Value $log."Source Port"
         $log | Add-Member -Type NoteProperty -Name "Range" -Value 0
